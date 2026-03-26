@@ -14,7 +14,7 @@ const assetRoutes = require("./routes/assets");
 const app = express();
 app.use(
   cors({
-    origin: "https://your-frontend-name.vercel.app",
+    origin: "https://military-management-system-gy3o.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),

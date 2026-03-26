@@ -26,6 +26,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const interval = setInterval(fetchData, 5000);
     return () => clearInterval(interval);
   }, []);

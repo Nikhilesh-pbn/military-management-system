@@ -16,9 +16,12 @@ const Assignments = () => {
   useEffect(() => {
     const fetchAssets = async () => {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/assets", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        "https://military-management-system-2.onrender.com/api/assets",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       setAssets(res.data);
       if (res.data.length > 0) {
         setFormData((prev) => ({ ...prev, asset_id: res.data[0].id }));

@@ -12,9 +12,12 @@ const Dashboard = () => {
   const fetchData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/assets", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        "https://military-management-system-2.onrender.com/api/assets",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       setAssets(res.data);
     } catch (err) {
       if (err.response?.status === 401) navigate("/login");

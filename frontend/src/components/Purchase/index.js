@@ -16,9 +16,12 @@ const Purchase = () => {
   useEffect(() => {
     const fetchStats = async () => {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/assets", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        "https://military-management-system-2.onrender.com/api/assets",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       setAvailableCount(res.data.length);
     };
     fetchStats();
@@ -28,9 +31,13 @@ const Purchase = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/purchases", formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.post(
+        "https://military-management-system-2.onrender.com/api/purchases",
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       navigate("/");
     } catch (err) {
       alert("Action Denied: Check Permissions");

@@ -1,70 +1,70 @@
-# Getting Started with Create React App
+# Military Asset Management System (MAMS) - Technical Documentation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 1. Project Overview
 
-## Available Scripts
+The Military Asset Management System (MAMS) is a specialized logistics framework designed to provide transparency and accountability for critical military assets (vehicles, weapons, and ammunition) across multiple bases.
 
-In the project directory, you can run:
+- **Assumptions:** Users have stable internet access to reach the hosted API; roles are predefined in the database; "Expended" assets refer to consumable stock like ammunition.
+- **Limitations:** Uses a file-based SQLite database for portability; Render’s free tier may cause a "cold start" delay (30-60 seconds) on the first request after inactivity.
 
-### `npm start`
+## 2. Tech Stack & Architecture
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend:** **React.js** with **Tailwind CSS**. Chosen for a responsive, component-based UI that handles real-time data updates for the dashboard.
+- **Backend:** **Node.js** with **Express.js**. Provides a lightweight, scalable environment for RESTful APIs and middleware-based security.
+- **Database:** **SQLite3**. Chosen for this initial framework because it is serverless and stores the entire database in a single file, ensuring high portability and easy auditing.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 3. Data Models / Schema
 
-### `npm test`
+The system utilizes a relational schema to track movements and balances:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Users:** `id`, `username`, `password_hash`, `role` (Admin, Commander, Logistics).
+- **Assets:** `id`, `name`, `type` (Vehicle, Weapon, Ammo), `base_id`, `quantity`.
+- **Transactions:** `id`, `asset_id`, `type` (Purchase, Transfer, Expenditure), `amount`, `source_base`, `dest_base`, `timestamp`.
+- **Personnel_Assignments:** `id`, `asset_id`, `personnel_name`, `status`.
 
-### `npm run build`
+## 4. Role-Based Access Control (RBAC)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+RBAC is enforced via **JWT (JSON Web Token) Middleware**:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Admin:** Full system access to all data and operations across all bases.
+- **Base Commander:** Access restricted to data and operations for their specific assigned base (e.g., Nellore Base).
+- **Logistics Officer:** Permissions restricted to the `/purchases` and `/transfers` routes only.
+- **Enforcement:** The backend decodes the JWT on every request and validates the `user.role` before granting access to specific API controllers.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 5. API Logging
 
-### `npm run eject`
+Accountability is maintained through two logging layers:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1.  **Audit Trail:** Every transaction (Purchase, Transfer, Assignment) creates a permanent record in the `Transactions` table with a timestamp and the initiating user's ID.
+2.  **Server Middleware:** All incoming API requests are logged to the console for real-time monitoring of system traffic and status codes.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 6. Setup Instructions
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Backend
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1.  Navigate to `/backend`.
+2.  Run `npm install`.
+3.  Start the server with `node index.js`. (Database initializes automatically).
 
-## Learn More
+### Frontend
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1.  Navigate to `/frontend`.
+2.  Run `npm install`.
+3.  Run `npm start` to view the app at `http://localhost:3000`.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 7. Key API Endpoints
 
-### Code Splitting
+- `POST /api/auth/login`: Authenticates user and returns JWT.
+- `GET /api/dashboard`: Returns calculated metrics (Net Movement = Purchases + Transfers In - Transfers Out).
+- `POST /api/transfers`: Records an asset movement between two base IDs.
+- `POST /api/purchases`: Adds new stock to a specific base inventory.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 8. Login Credentials
 
-### Analyzing the Bundle Size
+Use these credentials for the live demo or local testing:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+| Role          | Username            | Password       |
+| :------------ | :------------------ | :------------- |
+| **Admin**     | `admin_user`        | `admin123`     |
+| **Commander** | `commander_base1`   | `base456`      |
+| **Logistics** | `logistics_officer` | `logistics789` |

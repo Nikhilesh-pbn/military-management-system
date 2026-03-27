@@ -2,11 +2,22 @@
 
 ## 1. Project Overview
 
-The Military Asset Management System (MAMS) is a specialized logistics framework designed to provide transparency and accountability for critical military assets (vehicles, weapons, and ammunition) across multiple bases.
+The **Military Asset Management System (MAMS)** is a specialized logistics framework designed to provide transparency and accountability for critical military assets (vehicles, weapons, and ammunition) across multiple bases.
 
-- **Assumptions:** Users have stable internet access to reach the hosted API; roles are predefined in the database; "Expended" assets refer to consumable stock like ammunition.
-- **Limitations:** Uses a file-based SQLite database for portability; Render’s free tier may cause a "cold start" delay (30-60 seconds) on the first request after inactivity.
+**Live Deployment Links:**
+* **Frontend (UI):** [https://military-management-system-gy3o.vercel.app](https://military-management-system-gy3o.vercel.app)
+* **Backend (API):** [https://military-management-system-2.onrender.com](https://military-management-system-2.onrender.com)
 
+---
+
+### Key Assumptions:
+* **Connectivity:** Users are assumed to have stable internet access to reach the hosted API and database.
+* **Predefined Roles:** System roles (Admin, Commander, Logistics) are predefined in the database to ensure immediate access control.
+* **Asset Consumption:** "Expended" assets specifically refer to consumable military stock, such as ammunition or fuel.
+
+### System Limitations:
+* **Database Choice:** Uses a file-based **SQLite** database. While this ensures high portability and easy auditing for a project framework, it is optimized for single-instance usage.
+* **Hosting Behavior:** Due to the use of **Render’s free tier** for the backend, users may experience a "cold start" delay (30-60 seconds) during the initial request after a period of inactivity.
 ## 2. Tech Stack & Architecture
 
 - **Frontend:** **React.js** with **Tailwind CSS**. Chosen for a responsive, component-based UI that handles real-time data updates for the dashboard.
